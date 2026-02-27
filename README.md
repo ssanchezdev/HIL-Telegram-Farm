@@ -3,7 +3,7 @@
 <p align="center">
 <b>Arquitectura de Automatización Distribuida (Hardware-in-the-Loop)</b>
 
-<i>Orquestación paralela de módems IoT y nodos Android físicos mediante IPC y Appium.</i>
+<i aling="center">Orquestación paralela de módems IoT y nodos Android físicos mediante IPC y Appium.</i>
 
 </p>
 
@@ -48,25 +48,26 @@ El demonio de Python (sms_monitor.py) extrae los códigos OTP entrantes mediante
 
 ## 🚀 Flujo de Trabajo (Diagrama de Topología)
 
+```mermaid
 graph TD;
-subgraph Capa Hardware / IoT
-A[Módem Físico COM] -->|Comandos AT| B(modem_controller.py)
-end
-
-    subgraph Capa Python / Orquestador
+    subgraph capa1 [Capa Hardware / IoT]
+        A[Módem Físico COM] -->|Comandos AT| B(modem_controller.py)
+    end
+    
+    subgraph capa2 [Capa Python / Orquestador]
         B -->|Regex: Código SMS| C(sms_monitor.py)
         C -->|Escribe Archivo Temporal| D[(Directorio Compartido: /numerosNode)]
         G(main.py) -->|Mapeo & Multiprocessing| C
     end
 
-    subgraph Capa JS / UI Workers
+    subgraph capa3 [Capa JS / UI Workers]
         D -->|Polling Asíncrono| F(telegram_reader.js)
         F -->|Inyecta OTP vía Appium| E[Teléfono Android físico]
         E -.->|ADB Clear Data| F
     end
 
     F -->|Registro de Estados| H[(db_manager.py / results.txt)]
-
+```
 ---
 
 ## ✨ Características Técnicas Destacadas
@@ -128,7 +129,7 @@ python main.py
 ---
 
 ## 📁 Estructura del Código
-
+```text
 HIL-Telegram-Farm/
 ├── main.py # 🧠 Orquestador maestro y gestor de procesos
 ├── config.py # ⚙️ Mapeo de Nodos, puertos Appium y baudrates
@@ -140,7 +141,7 @@ HIL-Telegram-Farm/
 ├── db_manager.py # 💾 Gestor I/O para guardado de estados (CSV/TXT)
 ├── sim_list.txt # 📄 Plantilla de asociación Módem <-> Dispositivo
 └── .gitignore # 🚫 Filtros de exclusión de repositorio
-
+```
 <p align="center">
 <i>Desarrollado con foco en la escalabilidad, la resiliencia y la integración de sistemas complejos.</i>
 </p>
